@@ -1,0 +1,68 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\definecolor{greyred}{RGB}{187,144,158}
+\definecolor{greyblue}{RGB}{144,158,187}
+\definecolor{greygreen}{RGB}{144,187,158}
+
+\usetikzlibrary{shapes.geometric,positioning,calc}
+\tikzset{
+        node distance=1.5cm and 2.0cm,
+        >=latex,
+        font=\sf\bfseries,
+        textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
+        pfeil/.style={->,line width=1.1pt},
+        box/.style={rectangle,draw,line width=1.1pt,
+        generator/.style={rectangle,fill=gray!5,line width=1.0pt,inner sep=10pt},minimum height=1.5cm,minimum width=2.8cm,align=center}
+        }
+
+\begin{document}
+
+\begin{tikzpicture}
+
+        \node[box] (checker)  {Model Checker};
+        \node[textfeld,font=\small\sf,text width=2cm] (model_example) [below=0.1cm of checker] {\textcolor{greyred!200}{\emph{Modular State Space Exploration}}};
+        % input
+        \node[textfeld] (model) [above left= of checker] {Model};
+        \node[textfeld,font=\small\sf,text width=2cm] (model_example) [below=0.1cm of model] {\textcolor{greyred!200}{\emph{Modular}}\\\textcolor{greyred!200}{\emph{Petri Net}}};
+        \node[textfeld] (system) [left=of model]{System};
+
+        \node[textfeld] (formula) [below left=of checker]  {Formula };
+        \node[textfeld,font=\small\sf\mdseries] (formula_example) [below= 0.1cm of formula] {\emph{State Predicates} \\ \emph{Temporal Logic}};
+        \node[textfeld] (specification)  [left=of formula]{Specification};
+
+        \coordinate(mid_specification_formula) at ($(model)!0.5!(formula)$) ;
+
+
+        % (in)formal
+        \node[textfeld,font=\sf\mdseries] (informal) [above=of system]{\emph{\textcolor{gray}{informal}}};
+        \node[textfeld,font=\sf\mdseries] (formal) [above=of model]{\textit{\textcolor{gray}{formal}}};
+        \draw[gray, dashed,line width=1.1pt] ($(informal)!0.5!(formal)+(0,-0.5)$) -- ($(informal)!0.5!(formal)+(0,-9)$);
+
+        % outputs
+
+        \node[] (positive) [above right=of checker] {\includegraphics[width=0.03\textwidth]{checkmark.pdf}};
+        \node[textfeld] (overflow) [right=of checker] {\includegraphics[width=0.09\textwidth]{image (2).png}};
+        \node[textfeld,font=\small\sf\mdseries] (stateexplosion) [below=0.1cm of overflow] {\emph{State Space Explosion}};
+        \node[] (negative) [below right=of checker] {\includegraphics[width=0.03\textwidth]{resources/cross.pdf}};
+        \node[textfeld,font=\small\sf\mdseries] (counterexample) [below=0.1cm  of negative]{\emph{Counterexample}};
+
+        % --- Arrows ---
+        \draw[pfeil] (system) -- (model);
+
+        \draw[pfeil] (specification) -- (formula);
+
+        \draw[pfeil] (model.east) -- (checker.north west);
+
+
+        \draw[pfeil] (formula.east) -- (checker.south west);
+
+        \draw[pfeil] (checker.north east) -- (positive.west) node[midway, above left] {+};
+
+        \draw[pfeil] (checker.east) -- (overflow) {};
+
+        \draw[pfeil] (checker.south east) -- (negative.west) node[midway, below left] {--};
+
+\end{tikzpicture}
+
+\end{document}

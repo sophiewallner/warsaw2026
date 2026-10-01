@@ -1,0 +1,51 @@
+\documentclass[margin=4mm]{standalone}
+\usepackage{tikz}
+\usepackage{../mss}
+\usepackage{sansmath}
+
+\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
+\tikzset{
+        node distance=1.35cm and 1.35cm,
+        >=latex,
+        font=\sf\bfseries\sansmath,
+        every edge/.append style={line width=1.1pt}
+        pfeil/.style={->,line width=1.1pt},
+        box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+        place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
+        transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
+        initial/.style={draw=none},
+        module/.style={rectangle,fill=gray!5,line width=1.1pt,inner sep=10pt},
+        module label/.style={text=gray!50},
+        synchronization/.style={draw,dashed,rounded corners,inner sep=6pt},
+        segment/.style={rectangle,draw,dashed,rounded corners=3mm,minimum height=1.5cm,minimum width=2.8cm}
+        }
+\tikzgraphsset{
+    every graph/.style = {use existing nodes}
+}
+\begin{document}
+\begin{tikzpicture}
+
+    \node[] (start2) {$start_2$};
+    \node[below=of start2] (idle2) {$idle_2$};
+    \node[below=of idle2] (wait2) {$wait_2$};
+    \node[below=of wait2] (crit2) {$crit_2$};
+
+    \node[initial, above left=3mm and 1.5mm of wait2] (initial3) {};
+
+    \graph{
+    start2 ->[edge label={$ proc_2 $}] idle2 ->[edge label={$ req_2 $}] wait2 ->[edge label={$ acq_2 $}] crit2 ->[overlay,edge label={$ rel_2 $}, bend left=170] start2
+    };
+
+    \graph{
+    initial3 ->[line width=1.2pt] wait2
+    };
+
+    \begin{scope}[on background layer]
+        \node[segment, fit=(wait2), label={left:$ \segment[21] $}] (o21) {};
+        \node[segment, draw=red, fit=(crit2), label={left:\textcolor{red}{$ \segment[22] $}}] (o22) {};
+        \node[segment, fit=(start2) (idle2) (wait2), label={left:$ \segment[23] $}] (o23) {};
+
+    \end{scope}
+
+\end{tikzpicture}
+\end{document}

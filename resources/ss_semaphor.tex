@@ -1,0 +1,78 @@
+
+\documentclass[margin=0.6cm]{standalone}
+\usepackage{tikz}
+\usepackage{../mss}
+\usepackage{sansmath}
+
+\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
+\tikzset{
+node distance=3cm and 4cm,
+>=latex,
+font=\sf\bfseries\sansmath,
+,
+textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
+pfeil/.style={->,line width=1.1pt},
+box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
+transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
+every edge/.append style={line width=1.1pt}
+module/.style={rectangle,draw,fill,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+initial/.style={draw=none}
+}
+\tikzgraphsset{
+    every graph/.style = {use existing nodes}
+}
+
+\begin{document}
+
+\begin{tikzpicture}[on grid]
+    \node[] (sss) {$ start_1 \; start_2 \; sem $};
+    \node[right=of sss] (sis) {$ start_1 \; idle_2 \; sem $};
+    \node[right=of sis] (sws) {$ start_1 \; wait_2 \; sem $};
+    \node[right=of sws] (sc) {$ start_1 \; crit_2 \; $};
+
+    \node[below=of sss] (iss) {$ idle_1 \; start_2 \; sem $};
+    \node[right=of iss] (iis) {$ idle_1 \; idle_2 \; sem $};
+    \node[right=of iis] (iws) {$ idle_1 \; wait_2 \; sem $};
+    \node[right=of iws] (ic) {$ idle_1 \; crit_2 \; $};
+
+    \node[below=of iss] (wss) {$ wait_1 \; start_2 \; sem $};
+    \node[right=of wss] (wis) {$ wait_1 \; idle_2 \; sem $};
+    \node[right=of wis] (wws) {$ wait_1 \; wait_2 \; sem $};
+    \node[right=of wws] (wc) {$ wait_1 \; crit_2 \; $};
+
+    \node[below=of wss] (cs) {$ crit_1 \; start_2 $};
+    \node[right=of cs] (ci) {$ crit_1 \; idle_2 $};
+    \node[right=of ci] (cw) {$ crit_1 \; wait_2 $};
+
+    \node[initial, above left=7.5mm and 5mm of sws] (start) {};
+
+    \graph{
+    {sss, sis, sws, sc} ->[edge label'={$proc_1$}] {iss, iis, iws, ic} ->[edge label'={$req_1$}] {wss, wis, wws, wc},
+    {wss, wis, wws} ->[edge label'={$acq_1$}] {cs, ci, cw} ->[overlay,edge label={$rel_1$}, bend right=165] {sss, sis, sws},
+    {sss, iss, wss, cs} ->[edge label={$proc_2$}] {sis, iis, wis, ci} ->[edge label={$req_2$}] {sws, iws, wws, cw},
+    {sws, iws, wws} ->[edge label={$acq_2$}] {sc, ic, wc} ->[overlay,edge label'={$rel_2$}, bend right=165] {sss, iss, wss}
+    };
+
+    \graph{start ->[line width=1.2pt] sws};
+
+    % Dimensions
+    \begin{scope}[node distance=2.5cm and 2.5cm]
+        \node[left=of sss] (proc1_oben) {};
+        \node[left=of cs] (proc1_unten) {};
+
+        \node[above=2cm of sss] (proc2_links) {};
+        \node[above=2cm of sc] (proc2_rechts) {};
+
+        \graph{
+        (proc1_oben) ->[draw=gray!90,edge label'={\textcolor{gray!90}{Process 1}}] (proc1_unten);
+        };
+        \graph{
+        (proc2_links) ->[draw=gray!90,edge label={\textcolor{gray!90}{Process 2}}] (proc2_rechts);
+        };
+    \end{scope}
+
+
+\end{tikzpicture}
+
+\end{document}

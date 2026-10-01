@@ -1,0 +1,52 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{../mss}
+\usepackage{sansmath}
+
+\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
+\tikzset{
+        node distance=1.35cm and 1.35cm,
+        >=latex,
+        font=\sf\bfseries\sansmath,
+        every edge/.append style={line width=1.1pt}
+        textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
+        pfeil/.style={->,line width=1.1pt},
+        box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+        place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
+        transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
+        initial/.style={draw=none},
+        module/.style={rectangle,fill=gray!5,line width=1.1pt,inner sep=10pt},
+        module label/.style={text=gray!50},
+        synchronization/.style={draw,dashed,rounded corners,inner sep=6pt},
+        segment/.style={rectangle,draw,dashed,rounded corners=3mm,minimum height=1.5cm,minimum width=2cm},
+        generator/.style={rectangle,draw,fill=gray!5,dashed,rounded corners=3mm,minimum height=0.7cm,minimum width=4.7cm},
+    every edge/.append style={line width=1.1pt},
+        }
+\tikzgraphsset{
+    every graph/.style = {use existing nodes}
+}
+\begin{document}
+\begin{tikzpicture}
+    \node[] (p1) {$ p_1 $};
+    \node[below left= of p1] (p2) {$ p_2$};
+    \node[below right =of p1] (p3) {$ p_3 $};
+    \node[below =of p3] (p4) {$ \emptyset $};
+
+    \node[initial, above left=3mm and 1.5mm of p1] (initial) {};
+
+    \graph{
+    initial ->[line width=1.2pt] p1
+    };
+
+    \graph{
+    p1 ->[edge label'={$ t_{11} $}] p2 ->[loop below,edge label={$ t_{13} $}] p2,p1 ->[edge label={$ t_{12} $}] p3 ->[edge label={$ t_{14} $}] p4
+    };
+
+    \begin{scope}[on background layer]
+        \node[segment, fit=(p1) (p2) (p3), label={above:$ \segment[11] $}] (o11) {};
+        \node[segment, fit=(p2), label={left:$ \segment[12] $}] (o12) {};
+        \node[segment, fit=(p4), label={left:$ \segment[13] $}] (o13) {};
+    \end{scope}
+
+\end{tikzpicture}
+\end{document}

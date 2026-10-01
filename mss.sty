@@ -1,0 +1,136 @@
+% Caligrafic letters for for modular structure -> \crazy{}
+\DeclareDocumentCommand{\crazy}{m}{\mathcal{#1}}
+\DeclareDocumentCommand{\concat}{}{\vert \vert}
+% for small caligraphic letters 
+\DeclareFontFamily{OT1}{pzc}{}
+\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\DeclareDocumentCommand{\smallcrazy}{m}{\contour[1]{black}{$\mathpzc{#1}$}}
+% Blackbord Bold Letters for Special Module Classes -> \wild{}
+\DeclareDocumentCommand{\wild}{m}{\mathbb{#1}}
+\DeclareDocumentCommand{\smallwild}{m}{\mathbbm{#1}}
+\renewcommand{\phi}{\varphi}
+\DeclareDocumentCommand{\abs}{m}{| #1 |}
+\DeclareDocumentCommand{\nat}{}{\mathbb{N}}
+\DeclareDocumentCommand{\set}{m}{\{#1\}}
+\DeclareDocumentCommand{\pn}{o}{N
+    \IfValueTF{#1}{= [P,T,f,w,\marking_0]}{}}
+% marking[index][superscript]
+\DeclareDocumentCommand{\marking}{o o}{m
+    \IfValueF{#2}{
+        \IfValueF{#1}{}
+        \IfValueT{#1}{_{#1}}
+    }
+    \IfValueT{#2}{
+        \IfBlankTF{#1}{^{#2}}{_{#1}^{#2}}
+    }}
+\DeclareDocumentCommand{\ss}{o o}{R
+    \IfValueT{#1}{= [V,E \IfValueT{#2}{,L}]}}
+% module{index}[=]
+\DeclareDocumentCommand{\module}{m o}{N_{#1}
+    \IfValueTF{#2}{= [P_#1,T_#1,f_#1,w_#1,\marking_{0#1}]}{}}
+\DeclareDocumentCommand{\modulecard}{}{\ell}
+\DeclareDocumentCommand{\modulescope}{}{j \in \set{1,\dotsc,\modulecard}}
+% modules[=]
+\DeclareDocumentCommand{\modules}{o}{\crazy{N}
+    \IfValueT{#1}{= \set{\module{1},\dotsc,\module{\modulecard}}}{}}
+\DeclareDocumentCommand{\synchronization}{}{\mathpzc{s}}
+% synchronizations[=]
+\DeclareDocumentCommand{\synchronizations}{o}{\crazy{S}
+    \IfValueTF{#1}{\subseteq {(\module[T]{1|interface} \cup \set{\epsilon}) \times \dotsc \times (\module[T]{\ell|interface} \cup \set{\epsilon})}}{}}
+% internals[index]
+\DeclareDocumentCommand{\internals}{o}{
+    \IfValueTF{#1}{T_{#1|internal}}{T_{internal}}}
+% interfaces[index]
+\DeclareDocumentCommand{\interfaces}{o}{
+    \IfValueTF{#1}{T_{#1|interface}}{T_{interface}}}
+% ms[=]
+\DeclareDocumentCommand{\ms}{o}{\crazy{M}
+    \IfValueTF{#1}{= [\modules,\synchronizations]}{}}
+
+%% Modular State Space
+%
+% localmarking{index}[superscript] with default index j
+\DeclareDocumentCommand{\localmarking}{m o}{m
+    \IfValueTF{#2}{_{#1}^{#2}}{_{#1}}}
+% marking = concatenation of local markings
+% concatmarking[superscript][initial]
+\DeclareDocumentCommand{\concatmarking}{o o}{
+    \IfValueT{#2}{
+        \marking[0] = \localmarking{01} \, \concat \, \dotsc \, \concat \, \localmarking{0\modulecard}
+    }
+    \IfValueF{#2}{
+        \IfValueT{#1}{
+            \marking[][#1] = \localmarking{1}[#1] \, \concat \, \dotsc \, \concat \, \localmarking{\modulecard}[#1]
+        }
+        \IfValueF{#1}{
+            \marking = \localmarking{1} \, \concat \, \dotsc \, \concat \, \localmarking{\modulecard}
+        }
+    }}
+
+% segment[index][superscript] with default index j
+\DeclareDocumentCommand{\segment}{o o}{O
+    \IfValueF{#2}{
+        \IfValueTF{#1}{_{#1}}{}
+    }
+    \IfValueT{#2}{
+        \IfBlankTF{#1}{^{#2}}{_{#1}^{#2}}
+    }}
+% generator[index][superscript] with default index j
+\DeclareDocumentCommand{\generator}{o o}{G
+    \IfValueF{#2}{
+        \IfValueTF{#1}{_{#1}}{}
+    }
+    \IfValueT{#2}{
+        \IfBlankTF{#1}{^{#2}}{_{#1}^{#2}}
+    }}
+% acc[set]
+\DeclareDocumentCommand{\acc}{m}{\mathring{#1}}
+% lss{index}[=]
+\DeclareDocumentCommand{\lss}{m o}{R_{#1}
+    \IfValueTF{#2}{= [V_{#1},E_{#1}]}{}}
+% mss[=][labelled][reduced]
+\DeclareDocumentCommand{\mss}{o o o}{\crazy{R}
+    \IfValueT{#3}{^*}
+    \IfValueT{#1}{= [\crazy{V}\IfValueT{#3}{^*},\crazy{E}\IfValueT{#3}{^*}
+                \ifthenelse{\equal{#1}{l}}{,\crazy{L}\IfValueT{#3}{^*}}{}]
+    }}
+
+\DeclareDocumentCommand{\modularmarking}{o o o}{\smallcrazy{m}
+    \IfValueT{#3}{_{0}
+        \IfBlankTF{#1}{}{
+            = \hstretch{1}{<} \acc{\set{\localmarking{01}}},\dotsc,\acc{\set{\localmarking{0\modulecard}}} \hstretch{1}{>}
+        }
+    }
+    \IfValueF{#3}{
+        \IfValueT{#2}{_{#2}
+            \IfBlankTF{#1}{}{= \hstretch{1}{<} \segment[1]^{#2}, \dotsc , \segment[\modulecard]^{#2} \hstretch{1}{>}}
+        }
+        \IfValueF{#2}{
+            \IfValueTF{#1}{= \hstretch{1}{<} \segment[1], \dotsc , \segment[\modulecard] \hstretch{1}{>}}
+            {}
+        }
+    }
+}
+
+\DeclareDocumentCommand{\transitionsequence}{}{\omega}
+\DeclareDocumentCommand{\modularmarking}{o o o}{\smallcrazy{m}
+    \IfValueT{#3}{_{0}
+        \IfBlankTF{#1}{}{
+            = \hstretch{1}{<} \acc{\set{\localmarking{01}}},\dotsc,\acc{\set{\localmarking{0\modulecard}}} \hstretch{1}{>}
+        }
+    }
+    \IfValueF{#3}{
+        \IfValueT{#2}{_{#2}
+            \IfBlankTF{#1}{}{= \hstretch{1}{<} \segment[1]^{#2}, \dotsc , \segment[\modulecard]^{#2} \hstretch{1}{>}}
+        }
+        \IfValueF{#2}{
+            \IfValueTF{#1}{= \hstretch{1}{<} \segment[1], \dotsc , \segment[\modulecard] \hstretch{1}{>}}
+            {}
+        }
+    }
+}
+
+\DeclareDocumentCommand{\interfaces}{o}{
+    \IfValueTF{#1}{T_{#1|interface}}{T_{interface}}}
+\newcommand{\stack}{\bigsqcup}

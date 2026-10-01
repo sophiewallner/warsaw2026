@@ -1,0 +1,41 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{../mss}
+\usepackage{sansmath}
+
+\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
+\tikzset{
+node distance=2cm and 2cm,
+>=latex,
+font=\sf\bfseries\sansmath,
+,
+textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
+pfeil/.style={->,line width=1.1pt},
+box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
+transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
+every edge/.append style={line width=1.1pt}
+module/.style={rectangle,draw,fill,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+initial/.style={draw=none}
+}
+\tikzgraphsset{
+    every graph/.style = {use existing nodes}
+}
+
+\begin{document}
+
+
+\begin{tikzpicture}[node distance=2cm and 2cm]
+    \node[] (p1) {$ p_1 $};
+    \node[right=of p1] (p2) {$ p_2 $};
+    \node[below= of p1] (p3) {$ p_1\omega $};
+
+    \node[initial, above left=2.5mm and 5mm of p1] (start) {};
+
+    \graph{start ->[line width=1.2pt] p1};
+
+    \graph{p1 ->[edge label={$ t_1 $}] p2, p1 ->[edge label={$ t_2 $}] p3 ->[loop right,edge label={$ t_2 $}] p3};
+
+\end{tikzpicture}
+
+\end{document}

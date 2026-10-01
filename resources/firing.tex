@@ -1,0 +1,68 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{sansmath}
+
+\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs}
+\tikzset{
+        node distance=1.5cm and 2.0cm,
+        >=latex,
+        font=\sf\bfseries\sansmath,
+        ,
+        textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
+        pfeil/.style={->,line width=1.1pt},
+        box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
+        place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
+        transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
+        every edge/.append style={line width=1.1pt}
+        }
+\tikzgraphsset{
+    every graph/.style = {use existing nodes}
+}
+
+% \usetikzlibrary{arrows.meta,arrows,shapes,snakes,automata,backgrounds,,positioning,decorations.pathmorphing,backgrounds,fit}
+% \tikzset{
+%   node distance=1.25cm,
+%   bend angle=45,
+%   auto,
+%   every picture/.style={/utils/exec={\sffamily}},
+%   arrow/.style={-latex,thick},
+%   inhibitor/.style={o-},
+%   rtransition/.style={rectangle,very thick,draw=red,fill=red!30,minimum size=6mm},
+%   btransition/.style={rectangle,very thick,draw=blue,fill=blue!30,minimum size=6mm},
+%   -|/.style={to path={-| (\tikztotarget)}},
+%   |-/.style={to path={|- (\tikztotarget)}},
+%   }
+
+
+
+\begin{document}
+\begin{tikzpicture}
+    \begin{scope}
+        \node[place,tokens=1,label=above:$ pre_1 $] (p1) {};
+        \node[place,below=of p1, tokens=2,label=above:$ pre_2 $] (p2) {};
+
+        \coordinate(mid) at ($(p1)!0.5!(p2)$) ;
+
+        \node[transition] (t) [right=of mid] {$ t $};
+
+        \node[place,right=of t,label=above:$ post_3 $] (p3) {};
+
+        \graph{p1->t->p3,p2->[edge label=$ 2 $] t -> p3};
+
+    \end{scope}
+
+    \begin{scope}[shift={(8,0)}]
+        \node[place,label=above:$ pre_1 $] (p1) {};
+        \node[place,below= of p1,label=above:$ pre_2 $] (p2) {};
+
+        \coordinate(mid) at ($(p1)!0.5!(p2)$) ;
+
+        \node[transition] (t) [right=of mid] {$ t $};
+
+        \node[place,tokens=1,right=of t,label=above:$ post_3 $] (p3) {};
+
+        \graph{p1->t->p3,p2->[edge label=$ 2 $] t -> p3};
+    \end{scope}
+
+\end{tikzpicture}
+\end{document}
