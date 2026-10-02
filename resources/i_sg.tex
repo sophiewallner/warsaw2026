@@ -1,28 +1,11 @@
 \documentclass{standalone}
-\usepackage{tikz}
+\usepackage{mss_tikz}
 \usepackage{../mss}
-\usepackage{sansmath}
 
-\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
 \tikzset{
         node distance=1.35cm and 1.35cm,
-        >=latex,
-        font=\sf\bfseries\sansmath,
-        every edge/.append style={line width=1.1pt}
-        textfeld/.style={align=center,minimum height=0.5cm,minimum width=1.5cm},
-        pfeil/.style={->,line width=1.1pt},
-        box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
-        place/.style={circle,line width=1.1pt,draw=black,minimum size=6mm},
-        transition/.style={rectangle,line width=1.1pt,draw=black,minimum size=6mm},
-        initial/.style={draw=none},
-        module/.style={rectangle,fill=gray!5,line width=1.1pt,inner sep=10pt},
-        module label/.style={text=gray!50},
-        synchronization/.style={draw,dashed,rounded corners,inner sep=6pt},
-        segment/.style={rectangle,draw,dashed,rounded corners=3mm,minimum height=1.5cm,minimum width=2.8cm}
         }
-\tikzgraphsset{
-    every graph/.style = {use existing nodes}
-}
+
 \begin{document}
 \begin{tikzpicture}
     % before first access of P2 

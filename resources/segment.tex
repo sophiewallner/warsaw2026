@@ -1,21 +1,13 @@
 \documentclass{standalone}
 \usepackage{../mss}
-\usepackage{sansmath}
-\usepackage{tikz}
-\usetikzlibrary{shapes.geometric,positioning,calc,petri,graphs,fit,backgrounds}
+
+\usepackage{mss_tikz}
+
 \tikzset{
         node distance=0.2cm and 2.0cm,
-        >=latex,
-        font=\sf\bfseries\sansmath,
         textfeld/.style={align=center,minimum height=1cm,minimum width=1.5cm},
-        pfeil/.style={->,line width=1.1pt},
-        box/.style={rectangle,draw,line width=1.1pt,minimum height=1.5cm,minimum width=2.8cm,align=center},
-        segment/.style={rectangle,draw,dashed,rounded corners=3mm,minimum height=1.5cm,minimum width=2.8cm},
         generator/.style={rectangle,draw,fill=gray!5,dashed,rounded corners=3mm,minimum height=1cm,minimum width=1cm}
         }
-\tikzgraphsset{
-    every graph/.style = {use existing nodes}
-}
 \begin{document}
 
 \begin{tikzpicture}
